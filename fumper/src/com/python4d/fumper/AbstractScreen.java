@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -32,7 +31,7 @@ public abstract class AbstractScreen implements Screen {
 	protected int wait1s = NB_CYCLE/10;
 	protected Fumper game;
 	
-	protected BitmapFont font_berlin;
+	protected BitmapFont font_berlin,font_pecita,font_hennypenny,font_hennypenny2,font_goodgirl;
 	protected SpriteBatch batch;
 	public SpriteBatch getBatch() {
 		return batch;
@@ -49,29 +48,34 @@ public abstract class AbstractScreen implements Screen {
 	private BodyEditorLoader bodyloader = new BodyEditorLoader(
 			Gdx.files.internal("texture/body/fumperbody.bd"));
 
-	protected Toast myToast=new Toast(1, 0);
+	protected Toast myToast=new Toast();
+
 	
 	//definition des objets
 	public enum TypeOfObject {
 
-		pomme_verte(1,"fruits/pomme_verte","pomme_verte"),
 		citron(1,"fruits/citron","citron"),
-		cerises(1,"fruits/cerises","cerises"),
-		orange(1,"fruits/orange","orange"),
 		pomme(1,"fruits/pomme-dessin", "pomme-dessin"),
+		poire(1,"fruits/poire", "poire"),
+		pomme_verte(1,"fruits/pomme_verte","pomme_verte"),
+		cerises(1,"fruits/cerises","cerises"),
 		pomme2(1,"fruits/pomme-dessin2", "pomme-dessin2"),
+		orange(1,"fruits/orange","orange"),
 		pomme3(1,"fruits/pomme-photo", "pomme-photo"),
-		SPLASH(1,"splash-screen/splash-image", "splash-image"),
+		cadre(1,"splash-screen/splash-image", "splash-image"),
+		helice(1,"splash-screen/helice", "helice"),
 		buche(1,"bascule/buche_bois","buche"),
 		planche(1,"bascule/planche","planche"),
 		panier(1,"objets/panier","panier"),
 		panier_front(1,"objets/panier-front",""),
 		tap_finger(2,"autres/tap_finger1","autres/tap_finger2"),
-		tapandplay(1,"autres/tapandplay","");
+		tapandplay(1,"autres/tapandplay",""),
+		start(1,"autres/start",""),
+		fruitjumper(1,"autres/fruitjumper","");
 		
 		String[] st;
 		private int nb_images;
-		private static int NB_FRUITS=7;
+		private static int NB_FRUITS=8;
 
 		TypeOfObject(int nb_images,String ... st) {
 			this.st = st;
@@ -104,7 +108,9 @@ public abstract class AbstractScreen implements Screen {
 	//definition des sons
 	public enum FumperSound
 	{	//  Name in ASSETS and use it as music or sound(false)
-	    INTRO( "sons/intro.mp3",true);
+	    INTRO( "sons/intro.mp3",true),
+	    bascule( "sons/bascule.mp3",false),
+	    fruit_bascule( "sons/fruit_bascule.mp3",false);
 
 	    private String fileName;
 	    private boolean music;
@@ -123,7 +129,9 @@ public abstract class AbstractScreen implements Screen {
 	    {
 	        return fileName;
 	    }
-	    
+	    /**
+	     * load en mémoire le son ou music
+	     */
 	    public void load(){
 	    	if (music)
 	    		msc=Gdx.audio.newMusic(Gdx.files.internal(fileName));
@@ -131,6 +139,15 @@ public abstract class AbstractScreen implements Screen {
 	    		snd=Gdx.audio.newSound(Gdx.files.internal(fileName));
 
 	    }
+	    public Music getMusic() {
+			return msc;
+		}
+
+		/**
+	     * Joue un son/music, le charge via load si 'null'
+	     * @param volume (float)
+	     * @param looping (boolean)
+	     */
 	    public void play(float volume,boolean looping){
 	    	if (music){
 	    		if (msc==null)
@@ -143,16 +160,27 @@ public abstract class AbstractScreen implements Screen {
 	    	{
 		    	if (snd==null)
 		    		load();
-		    	snd.setLooping(id, looping);
-		    	snd.loop(volume);
 		    	id=snd.play(volume);
+		    	snd.setLooping(id, looping);
 	    	}
 	    }
+	    
+
+	    /**
+	     * Joue le son/music sans loop volume max.
+	     */
+	    public void play(){
+	    	play(1.0f,false);
+	    }
 	    public void dispose(){
-	    	if (music)
+	    	if (music){
 		    	msc.dispose();
-	    	else
+	    		msc=null;
+	    	}
+	    	else{
 	    		snd.dispose();
+	    		snd=null;
+	    	}
 	    }
 	}
 	public BodyEditorLoader getBodyLoader() {
@@ -164,21 +192,30 @@ public abstract class AbstractScreen implements Screen {
 
 		this.font_berlin = new BitmapFont(Gdx.files.internal("font/berlin.fnt"),
 		         Gdx.files.internal("font/berlin.png"), false);
+		this.font_hennypenny= new BitmapFont(Gdx.files.internal("font/HennyPenny.fnt"),
+		         Gdx.files.internal("font/HennyPenny.png"), false);
+		this.font_hennypenny2= new BitmapFont(Gdx.files.internal("font/HennyPenny.fnt"),
+		         Gdx.files.internal("font/HennyPenny.png"), false);
+		this.font_pecita= new BitmapFont(Gdx.files.internal("font/pecita.fnt"),
+		         Gdx.files.internal("font/pecita.png"), false);
+		this.font_goodgirl= new BitmapFont(Gdx.files.internal("font/goodgirl.fnt"),
+		         Gdx.files.internal("font/goodgirl.png"), false);
 		this.batch = new SpriteBatch();
 		this.stage = new Stage(0, 0, true);
 	}
 
 	protected String getName() {
-		return getClass().getSimpleName();
+		return "";
+		//return getClass().getSimpleName();
 	}
 
 	public World getWorldbox() {
 		if (worldbox == null) {
 			worldbox = new World(new Vector2(0, -9.8f), true);
-			 debugRenderer = new Box2DDebugRenderer(false, false, false,
-			 false,false, false);
-			 debugRenderer = new Box2DDebugRenderer(true, true, true, true,
-			 		true, true);
+//			 debugRenderer = new Box2DDebugRenderer(false, false, false,
+//			 false,false, false);
+//			 debugRenderer = new Box2DDebugRenderer(true, true, true, true,
+//			 		true, true);
 		}
 		return worldbox;
 	}
@@ -267,8 +304,8 @@ public abstract class AbstractScreen implements Screen {
 		if (worldbox!=null) worldbox.dispose();
 		if (stage!=null) stage.dispose();
 		if (font_berlin!=null) font_berlin.dispose();
+		if (font_pecita!=null) font_pecita.dispose();
 		if (batch!=null) batch.dispose();
-		
 
 	}
 

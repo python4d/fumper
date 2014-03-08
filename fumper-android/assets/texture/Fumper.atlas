@@ -1,0 +1,175 @@
+
+Fumper-1.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+autres/fruitjumper
+  rotate: false
+  xy: 2, 2
+  size: 270, 500
+  orig: 270, 500
+  offset: 0, 0
+  index: -1
+autres/start
+  rotate: false
+  xy: 274, 272
+  size: 320, 230
+  orig: 320, 230
+  offset: 0, 0
+  index: -1
+autres/tap_finger1
+  rotate: false
+  xy: 274, 120
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+autres/tap_finger2
+  rotate: false
+  xy: 747, 352
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+autres/tapandplay
+  rotate: false
+  xy: 596, 202
+  size: 149, 300
+  orig: 149, 300
+  offset: 0, 0
+  index: -1
+
+Fumper-2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background/background
+  rotate: false
+  xy: 2, 2
+  size: 640, 469
+  orig: 640, 469
+  offset: 0, 0
+  index: -1
+
+Fumper-3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bascule/buche_bois
+  rotate: false
+  xy: 644, 2
+  size: 341, 327
+  orig: 341, 327
+  offset: 0, 0
+  index: -1
+bascule/planche
+  rotate: false
+  xy: 2, 9
+  size: 640, 320
+  orig: 640, 320
+  offset: 0, 0
+  index: -1
+
+Fumper-4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+fruits/cerises
+  rotate: false
+  xy: 2, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/citron
+  rotate: false
+  xy: 104, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/orange
+  rotate: false
+  xy: 206, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/poire
+  rotate: false
+  xy: 308, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/pomme-dessin
+  rotate: false
+  xy: 410, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/pomme-dessin2
+  rotate: false
+  xy: 512, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/pomme-photo
+  rotate: false
+  xy: 614, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+fruits/pomme_verte
+  rotate: false
+  xy: 716, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+
+Fumper-5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+objets/panier
+  rotate: false
+  xy: 2, 2
+  size: 587, 640
+  orig: 587, 640
+  offset: 0, 0
+  index: -1
+
+Fumper-6.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+objets/panier-front
+  rotate: false
+  xy: 2, 2
+  size: 587, 640
+  orig: 587, 640
+  offset: 0, 0
+  index: -1
+
+Fumper-7.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+splash-screen/helice
+  rotate: false
+  xy: 595, 2
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+splash-screen/splash-image
+  rotate: false
+  xy: 2, 22
+  size: 591, 180
+  orig: 591, 180
+  offset: 0, 0
+  index: -1

@@ -90,19 +90,31 @@ public class Toast {
       this.max_toasts = max_toasts;
       this.margin = margin;
    }
+   public Toast() {
+	   this.max_toasts=1;
+	   this.margin = 0;
+   }
 
+   /** Autre forme de makeText 
+    * @see #makeText(String string, BitmapFont myfont, float time_to_spend)
+    * @see #makeText(String string, BitmapFont myfont, int prefered_color, float alpha_background, int fade_mode, float x, float y, float time_to_spend)
+    */
+   public boolean makeText(String string, BitmapFont myfont, float time_to_spend) {
+	   return makeText( string,  myfont,  Toast.COLOR_PREF.GREEN, 0,Toast.STYLE.NORMAL, 0,TEXT_POS.down,time_to_spend);
+   }
 
-   /**  Function to emulate an android like Toast : use toaster() FROM your game Renderer
+/**  Function to emulate an android like Toast : use toaster() FROM your game Renderer
     *  @param string string to display
     *  @param time time desired into seconds
-    *  @param _font font desired, should lie in /data/"_font".png/fnt
+    *  @param _font font desired, shoulbd lie in /data/"_font".png/fnt
     *  @param prefered_color color (see {@linkplain COLOR_PREF}) that is prefered (it will random for the 2 other colors, but for this one, it will stay at 1.0f)
+    *  @param alpha_background 0..1f for prefered_color background alpha (alpha_background=0 => no background color
     *  @param fade_mode fading, blinking .. style (see {@link TEXT_POS})
     *  @param x where we want the text on X coords
     *  @param y where we want the text on Y coords, it will offset by number of total texts to display in this Toast
     *  @param time_to_spend the time to diplay THIS text
     * */
-   public boolean makeText(String string, BitmapFont myfont, int prefered_color, int fade_mode, float x, float y, float time_to_spend) {
+   public boolean makeText(String string, BitmapFont myfont, int prefered_color, float alpha_background, int fade_mode, float x, float y, float time_to_spend) {
 
       // no more than max_toasts texts
       if (i >= max_toasts)
@@ -112,7 +124,8 @@ public class Toast {
 
       // we load the desired font
       font[i] = myfont;
-
+      font[i].setScale(1.0f);//permet de recalculer la taille de base de la font
+      font[i].setScale(Gdx.graphics.getWidth()/font[i].getBounds(string).width/1.1f);
       font_width[i] = (int) (font[i].getBounds(string).width + margin); // width of the string + margin
       font_height[i] = (int) font[i].getLineHeight() + margin; // height of the string
       float x_bounds = font[i].getBounds(string).width / 2; // we center the string
@@ -174,7 +187,7 @@ public class Toast {
 
       // transparent background is just a pixmap with a color
       pix_back[i] = new Pixmap(next_power_of_two(font_width[i]), next_power_of_two(font_height[i]), Format.RGBA4444);
-      pix_back[i].setColor(R[i]/2, G[i]/2, B[i]/2, 0.25f); // 1/4 transparency for backgroud, you could customize.. factorize well you know :)
+      pix_back[i].setColor(R[i]/2, G[i]/2, B[i]/2, alpha_background);
       pix_back[i].fill();
       back[i] = new TextureRegion(new Texture(pix_back[i]), X[i], Y[i], font_width[i], font_height[i]);
 

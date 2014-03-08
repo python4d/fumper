@@ -30,17 +30,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.python4d.fumper.AbstractScreen.FumperSound;
 import com.python4d.fumper.AbstractScreen.TypeOfObject;
 import com.python4d.fumper.Toast.TEXT_POS;
 
 public class SplashScreen extends AbstractScreen {
 
 	private AnimatedActor tapFingerActor;
-	private Image splashImage, bgImage;
+	private Image splashImage, bgImage, fruitjumperImage;
 	private Body splashBody;
 	private Array<Fruit> pommes = new Array<Fruit>();
 	private boolean quit = false;
-	private Text textActor;
+	private TextActor textActor;
 	private int rotation;
 
 	public SplashScreen(Fumper game) {
@@ -50,27 +51,25 @@ public class SplashScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		super.show();
-		FumperSound.INTRO.play(0.0f, true);
+		FumperSound.INTRO.play(1.0f, true);
 		AtlasRegion bgRegion = getAtlas().findRegion("background/background");
 		Drawable bgDrawable = new TextureRegionDrawable(bgRegion);
 		bgImage = new Image(bgDrawable);
 		bgImage.setFillParent(true);
-		bgImage.getColor().a = 0.5f;
+		bgImage.getColor().a = 0.8f;
 		stage.addActor(bgImage);
 
-		AtlasRegion splashRegion = getAtlas().findRegion(
-				"splash-screen/splash-image");
+		AtlasRegion splashRegion = getAtlas().findRegion(TypeOfObject.helice.getNameImage());
 		Drawable splashDrawable = new TextureRegionDrawable(splashRegion);
 		splashImage = new Image(splashDrawable);
-		splashImage.getColor().a = 0f;
-		splashImage.addAction(sequence(fadeIn(0.75f), delay(3.0f)));
-		splashImage.setOrigin(0, 0);
-		splashImage.setScale(1f);
 		stage.addActor(splashImage);
 
-		textActor = new Text(font_berlin, "\n\n Fruit\n J\n u\n m\n p\n e\n r");
+		textActor = new TextActor(font_pecita, "\n\n JUMPER");
 		textActor.setZIndex(9);
-		stage.addActor(textActor);
+		//stage.addActor(textActor);
+		
+		fruitjumperImage=new Image(new TextureRegionDrawable(getAtlas().findRegion(TypeOfObject.fruitjumper.getNameImage())));
+		stage.addActor(fruitjumperImage);
 
 		Array<AtlasRegion> arrayTapFinger=new Array<AtlasRegion>();
 		for (int i=0;i<TypeOfObject.tap_finger.getNbImages();i++){
@@ -87,6 +86,7 @@ public class SplashScreen extends AbstractScreen {
 				Gdx.app.log("Fumper/ClickListener/", "button clicked");
 				worldbox.setGravity(new Vector2(0, -9.8f));
 				game.setScreen(new PlayScreen(game));
+				FumperSound.INTRO.getMusic().pause();
 				dispose();
 			}
 
@@ -96,16 +96,15 @@ public class SplashScreen extends AbstractScreen {
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
 				if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
-					if (!myToast.makeText("Back Again to Quit", font_berlin,
-							Toast.COLOR_PREF.GREEN, Toast.STYLE.NORMAL, 0,
-							TEXT_POS.down, 1f))
+					if (!myToast.makeText("Back Again to Quit", font_berlin, 1f))
 						quit = true;
 				}
 				return super.keyDown(event, keycode);
 			}
 
 		});
-
+		
+		
 	}
 
 	// Utilisation de render pour repositionner les images si issues du monde
@@ -156,8 +155,7 @@ public class SplashScreen extends AbstractScreen {
 							+ (int) Gdx.input.getPitch() + "/azimut="
 							+ (int) Gdx.input.getAzimuth() + "/roll="
 							+ (int) Gdx.input.getRoll());
-			// worldbox.setGravity(new Vector2(-Gdx.input.getAccelerometerX(),
-			// -Gdx.input.getAccelerometerY()));
+			worldbox.setGravity(new Vector2(-Gdx.input.getAccelerometerX(), -9.8f));
 		}
 		if (quit)
 			game.quit(game.getScreen());
@@ -166,30 +164,34 @@ public class SplashScreen extends AbstractScreen {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		splashImage.setSize(width - 200,
-				(width - 200) * (splashImage.getDrawable().getMinHeight())
-						/ splashImage.getDrawable().getMinWidth());
-		splashImage.setPosition((width - splashImage.getWidth()) / 2.0f,
-				(height - splashImage.getHeight()) / 4.0f);
+		
 
+		// Taille Image et Création du Body
 		if (splashBody != null) {
 			worldbox.destroyBody(splashBody);
 		}
-		// Body de la cage
-		splashBody = CreateSplashBody((width - splashImage.getWidth()) / 2.0f,
-				(height - splashImage.getHeight()) / 4.0f);
+		splashImage.setSize(width /2f,	(width /2f) * (splashImage.getHeight())/ splashImage.getWidth());
+		splashBody = CreateSplashBody(width/1.4f,height/2.2f );
 
+		textActor.setScale(width/500.0f);
 		textActor.setPosition(0, Gdx.graphics.getHeight());
-
-		tapFingerActor.setScale(width/500.0f);
-		tapFingerActor.setPosition(Gdx.graphics.getWidth()/1.5f,
-				Gdx.graphics.getHeight()/2.0f);
+		
+		//Resize the fruitjumper
+		fruitjumperImage.setZIndex(1);
+		fruitjumperImage.setScale(height/600.0f);
+		fruitjumperImage.setPosition((width)/50.0f,
+				Gdx.graphics.getHeight()/20.0f);
+		
+		//resize start hand 
+		tapFingerActor.setScale(width/300.0f);
+		tapFingerActor.setPosition(Gdx.graphics.getWidth()/1.8f,
+				Gdx.graphics.getHeight()/20.0f);
 	}
 
 	protected Body CreateSplashBody(float Posx, float Posy) {
 		Posx = Posx * AbstractScreen.WORLD_TO_BOX;
 		Posy = Posy * AbstractScreen.WORLD_TO_BOX;
-		final TypeOfObject too = TypeOfObject.SPLASH;
+		final TypeOfObject too = TypeOfObject.helice;
 
 		// Create our body definition
 		BodyDef bd = new BodyDef();
@@ -207,18 +209,15 @@ public class SplashScreen extends AbstractScreen {
 		body.createFixture(fd);
 		Body groundbody = worldbox.createBody(new BodyDef());
 		RevoluteJointDef jd = new RevoluteJointDef();
-		jd.enableLimit = true;
-		jd.lowerAngle = -30 * MathUtils.degreesToRadians;
-		jd.upperAngle = 30 * MathUtils.degreesToRadians;
+		//jd.enableLimit = true;
+		//jd.lowerAngle = -30 * MathUtils.degreesToRadians;
+		//jd.upperAngle = 30 * MathUtils.degreesToRadians;
 		jd.bodyA = groundbody;
 		jd.bodyB = body;
 		jd.collideConnected = false;
 
-		float instable = 1.0f;
-		jd.localAnchorA.add(Posx + body.getLocalCenter().x,
-				Posy + body.getLocalCenter().y * instable);
-		jd.localAnchorB.add(body.getLocalCenter().x, body.getLocalCenter().y
-				* instable);
+		jd.localAnchorA.add(Posx ,Posy );
+		jd.localAnchorB.add(body.getLocalCenter().x, body.getLocalCenter().y);
 		worldbox.createJoint(jd);
 
 		return body;
@@ -226,8 +225,9 @@ public class SplashScreen extends AbstractScreen {
 
 	@Override
 	public void dispose() {
-		if (FumperSound.INTRO != null)
-			FumperSound.INTRO.dispose();
 		super.dispose();
+
+		if (FumperSound.INTRO != null) 
+			FumperSound.INTRO.dispose();
 	}
 }

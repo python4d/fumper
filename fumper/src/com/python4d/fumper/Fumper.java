@@ -21,7 +21,7 @@ public class Fumper extends Game {
 		Gdx.app.log("Fumper", "Creating game");
 		fpsLogger = new FPSLogger();
         Gdx.input.setCatchBackKey(true);
-		setScreen(getSplashScreen());
+		setScreen(new PlayScreen(this));
 	}
 
 	@Override
