@@ -16,7 +16,7 @@ public class Main {
 
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "fumper";
-		cfg.useGL20 = false;
+		cfg.useGL20 = true;
 		cfg.width = 320;
 		cfg.height = 480;
 

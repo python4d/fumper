@@ -1,6 +1,10 @@
 package com.python4d.fumper;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
  * Redéfini la fonction act de la classe Actor avec une animation récupérer via
@@ -11,16 +15,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  *         >stackoverflow<a/>}
  */
 public class AnimatedActor extends Image {
-	private final AnimationDrawable drawable;
-
-	public AnimatedActor(AnimationDrawable drawable) {
-		super(drawable);
-		this.drawable = drawable;
+	public final Animation anim;
+	private float stateTime = 0;
+	
+	public AnimatedActor(Animation anim) {
+		super(anim.getKeyFrame(0));
+	    this.anim = anim;
+	}
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+		setDrawable(new TextureRegionDrawable(anim.getKeyFrame(stateTime)));
 	}
 
 	@Override
 	public void act(float delta) {
-		drawable.act(delta);
-		super.act(delta);
+		stateTime += delta;
+	    super.act(delta);
 	}
 }

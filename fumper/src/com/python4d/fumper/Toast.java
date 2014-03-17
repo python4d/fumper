@@ -89,10 +89,7 @@ public class Toast {
    public Toast(int max_toasts, int margin) {
       this.max_toasts = max_toasts;
       this.margin = margin;
-   }
-   public Toast() {
-	   this.max_toasts=1;
-	   this.margin = 0;
+      spriteBatch = new SpriteBatch(); // a new spriteBatch for a new text
    }
 
    /** Autre forme de makeText 
@@ -100,7 +97,7 @@ public class Toast {
     * @see #makeText(String string, BitmapFont myfont, int prefered_color, float alpha_background, int fade_mode, float x, float y, float time_to_spend)
     */
    public boolean makeText(String string, BitmapFont myfont, float time_to_spend) {
-	   return makeText( string,  myfont,  Toast.COLOR_PREF.GREEN, 0,Toast.STYLE.NORMAL, 0,TEXT_POS.down,time_to_spend);
+	   return makeText( string,  myfont,  Toast.COLOR_PREF.GREEN, 0f,Toast.STYLE.NORMAL, 0,TEXT_POS.down,time_to_spend);
    }
 
 /**  Function to emulate an android like Toast : use toaster() FROM your game Renderer
@@ -120,7 +117,7 @@ public class Toast {
       if (i >= max_toasts)
          return false;
 
-      spriteBatch = new SpriteBatch(); // a new spriteBatch for a new text
+
 
       // we load the desired font
       font[i] = myfont;
@@ -188,6 +185,7 @@ public class Toast {
       // transparent background is just a pixmap with a color
       pix_back[i] = new Pixmap(next_power_of_two(font_width[i]), next_power_of_two(font_height[i]), Format.RGBA4444);
       pix_back[i].setColor(R[i]/2, G[i]/2, B[i]/2, alpha_background);
+      Gdx.app.log("Toast/RGBA=", "R"+R[i]/2+"G"+G[i]/2+"B"+ B[i]/2+"A"+alpha_background);
       pix_back[i].fill();
       back[i] = new TextureRegion(new Texture(pix_back[i]), X[i], Y[i], font_width[i], font_height[i]);
 

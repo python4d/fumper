@@ -20,6 +20,7 @@ public class Bascule{
 
 	private AbstractScreen screen; 
 	private Image imgBuche,imgPlanche;
+
 	private Body bodyBuche,bodyPlanche;
 	public Bascule(AbstractScreen screen, float Posx, float Posy, float size) {
 		this.screen=screen;
@@ -37,6 +38,9 @@ public class Bascule{
 		 });
 	}
 
+	public Image getImgBuche() {
+		return imgBuche;
+	}
 	public Image getImgPlanche() {
 		return imgPlanche;
 	}
@@ -88,12 +92,12 @@ public class Bascule{
 	
 		screen.stage.addActor(imgPlanche);
 
-		PosxW = (imgPlanche.getX()) * AbstractScreen.WORLD_TO_BOX;
-		PosyW = (imgPlanche.getY()) * AbstractScreen.WORLD_TO_BOX;
+		//PosxW = (imgPlanche.getX()) * AbstractScreen.WORLD_TO_BOX;
+		//PosyW = (imgPlanche.getY()) * AbstractScreen.WORLD_TO_BOX;
 		// Create our body definition
 		BodyDef bd = new BodyDef();
 		// Set its world position
-		bd.position.set(new Vector2(PosxW, PosyW));
+		//bd.position.set(new Vector2(PosxW, PosyW));
 		bd.type = BodyType.DynamicBody;
 		// Create a body from the definition and add it to the world
 		 bodyPlanche = screen.getWorldbox().createBody(bd);
@@ -127,13 +131,20 @@ public class Bascule{
 	}
 	public void RemoveCatapult(){
 		imgBuche.remove();
+		imgBuche=null;
 		imgPlanche.remove();
+		imgPlanche=null;
 		screen.getWorldbox().destroyBody(bodyBuche);
+		bodyBuche=null;
 		screen.getWorldbox().destroyBody(bodyPlanche);
+		bodyPlanche=null;
 		
 	}
 
-	public void render() {
+	public void update() {
+		imgBuche.setPosition(bodyBuche.getPosition().x
+				* AbstractScreen.BOX_TO_WORLD, bodyBuche.getPosition().y
+				* AbstractScreen.BOX_TO_WORLD);
 		imgPlanche.setPosition(bodyPlanche.getPosition().x
 				* AbstractScreen.BOX_TO_WORLD, bodyPlanche.getPosition().y
 				* AbstractScreen.BOX_TO_WORLD);
@@ -143,7 +154,7 @@ public class Bascule{
 	}
 
 	public void push(int level) {
-		float forceY=-bodyPlanche.getMass()*bodyPlanche.getMass();//(float) -Math.pow(bodyPlanche.getMass(), 1.60)*(1+level/100.0f);
+		float forceY=(float) -Math.pow(bodyPlanche.getMass(), 1.90)*(1+level/100.0f);//-bodyPlanche.getMass()*bodyPlanche.getMass();//
 		Gdx.app.log("Fumper/Bascule/push()",": forceY="+forceY);
 		bodyPlanche.applyAngularImpulse(forceY, true);
 		//bodyPlanche.applyTorque(forceY, true);

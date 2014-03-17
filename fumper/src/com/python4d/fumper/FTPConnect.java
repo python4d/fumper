@@ -31,8 +31,8 @@ public class FTPConnect extends FTPClient {
 			if (!FTPReply.isPositiveCompletion(reply)) {
 				disconnect();
 				Gdx.app.log("FTP/FTPConnect/Open=",
-						"!FTP server refused connection.");
-				return "!FTP server refused";
+						"!FTP server refused connection!");
+				return "!FTP server refused!";
 			}
 			boolean b = login("forumpanhard", "baco22");
 			setFileType(FTP.ASCII_FILE_TYPE);
@@ -40,7 +40,7 @@ public class FTPConnect extends FTPClient {
 			fis = new ByteArrayOutputStream(buffersize);
 			b = retrieveFile(filename, fis);
 			if (!b)
-				return "!FTP File refused";
+				return "!FTP File refused!";
 			// cf http://stackoverflow.com/questions/4539878/strange-string-split-n-behavior
 			linesfile = fis.toString().split("[\\r\\n]+");
 			if (linesfile.length>0)
@@ -48,17 +48,17 @@ public class FTPConnect extends FTPClient {
 					result.put(i.split("=")[0], i.split("=")[1]);
 			logout();
 			if (result.get(key)==null)
-				return new String("!No Data");
+				return new String("!No Data Available!");
 			else
 				return result.get(key);
 		}
 		catch (FTPConnectionClosedException e){
 			e.printStackTrace();
-			return "!FTP Service Not Available";
+			return "!FTP Service Not Available!";
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			return "!No InternetConnection";
+			return "!No Internet Access!";
 		}
 
 	}

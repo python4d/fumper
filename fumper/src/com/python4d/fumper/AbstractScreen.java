@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -20,22 +19,21 @@ public abstract class AbstractScreen implements Screen {
 	protected boolean debug=false;
 	
 	// the fixed viewport dimensions (ratio: 1.6)
-	public static int GAME_VIEWPORT_WIDTH = 400,
-			GAME_VIEWPORT_HEIGHT = 240;
+	public static int GAME_VIEWPORT_WIDTH = 320,
+			GAME_VIEWPORT_HEIGHT = 480;
 	public static float WORLD_TO_BOX = GAME_VIEWPORT_HEIGHT/20000.0f;//0.01f;
-	public static float BOX_TO_WORLD = 1.0f/WORLD_TO_BOX;//100f;
-	protected int NB_CYCLE = (int) (10000.0f / 60.0f);
-	protected int wait = NB_CYCLE;
-	private float fdt =0;
+	public static float BOX_TO_WORLD = 1.0f/WORLD_TO_BOX;
+	protected float delta=60.0f;
+	protected int NB_CYCLE_FOR_20S = (int) (20000.0f /delta);
+	protected int NB_CYCLE_FOR_10S = (int) (10000.0f /delta);
+	protected int NB_CYCLE_FOR_5S = (int) (5000.0f / delta);
+	protected int NB_CYCLE_FOR_1S = (int) (1000.0f /delta);
+	protected int NB_CYCLE_FOR_2S = (int) (2000.0f / delta);
+	protected int wait = NB_CYCLE_FOR_1S;
 
-	protected int wait1s = NB_CYCLE/10;
 	protected Fumper game;
 	
-	protected BitmapFont font_berlin,font_pecita,font_hennypenny,font_hennypenny2,font_goodgirl;
-	protected SpriteBatch batch;
-	public SpriteBatch getBatch() {
-		return batch;
-	}
+	protected BitmapFont font_berlin,font_pecita,font_hennypenny,font_hennypenny2,font_goodgirl,font_goodgirl2,font_goodgirl3;
 
 	protected  Stage stage;
 	protected TypeOfObject[] tofTable = TypeOfObject.values();
@@ -48,18 +46,19 @@ public abstract class AbstractScreen implements Screen {
 	private BodyEditorLoader bodyloader = new BodyEditorLoader(
 			Gdx.files.internal("texture/body/fumperbody.bd"));
 
-	protected Toast myToast=new Toast();
+	protected Toast myToast=new Toast(1,0);
 
 	
 	//definition des objets
 	public enum TypeOfObject {
-
 		citron(1,"fruits/citron","citron"),
 		pomme(1,"fruits/pomme-dessin", "pomme-dessin"),
 		poire(1,"fruits/poire", "poire"),
 		pomme_verte(1,"fruits/pomme_verte","pomme_verte"),
 		cerises(1,"fruits/cerises","cerises"),
+		citrouille(1,"fruits/citrouille","citrouille"),
 		pomme2(1,"fruits/pomme-dessin2", "pomme-dessin2"),
+		fraise(1,"fruits/fraise","fraise"),
 		orange(1,"fruits/orange","orange"),
 		pomme3(1,"fruits/pomme-photo", "pomme-photo"),
 		cadre(1,"splash-screen/splash-image", "splash-image"),
@@ -71,11 +70,14 @@ public abstract class AbstractScreen implements Screen {
 		tap_finger(2,"autres/tap_finger1","autres/tap_finger2"),
 		tapandplay(1,"autres/tapandplay",""),
 		start(1,"autres/start",""),
-		fruitjumper(1,"autres/fruitjumper","");
+		fusee(4,"objets/fusee1","objets/fusee2","objets/fusee3","objets/fusee4"),
+		fruitjumper(1,"autres/fruitjumper",""),
+		splash(1,"autres/splash",""),
+		oiseau(8,"oiseau/bird2","oiseau/bird1","oiseau/bird5","oiseau/bird3","oiseau/bird4","oiseau/bird3","oiseau/bird5","oiseau/bird1");
 		
 		String[] st;
 		private int nb_images;
-		private static int NB_FRUITS=8;
+		private static int NB_FRUITS=10;
 
 		TypeOfObject(int nb_images,String ... st) {
 			this.st = st;
@@ -108,8 +110,10 @@ public abstract class AbstractScreen implements Screen {
 	//definition des sons
 	public enum FumperSound
 	{	//  Name in ASSETS and use it as music or sound(false)
+	    spaceship( "sons/spaceship.mp3",false),
 	    INTRO( "sons/intro.mp3",true),
 	    bascule( "sons/bascule.mp3",false),
+	    bird( "sons/bird.mp3",false),
 	    fruit_bascule( "sons/fruit_bascule.mp3",false);
 
 	    private String fileName;
@@ -137,7 +141,6 @@ public abstract class AbstractScreen implements Screen {
 	    		msc=Gdx.audio.newMusic(Gdx.files.internal(fileName));
 	    	else
 	    		snd=Gdx.audio.newSound(Gdx.files.internal(fileName));
-
 	    }
 	    public Music getMusic() {
 			return msc;
@@ -166,11 +169,22 @@ public abstract class AbstractScreen implements Screen {
 	    }
 	    
 
+		public Sound getSnd() {
+			return snd;
+		}
 	    /**
 	     * Joue le son/music sans loop volume max.
 	     */
 	    public void play(){
 	    	play(1.0f,false);
+	    }
+	    /**
+	     * Joue le son/music sans loop.
+	     * 
+	     * @param volume
+	     */
+	    public void play(float volume){
+	    	play(volume,false);
 	    }
 	    public void dispose(){
 	    	if (music){
@@ -200,7 +214,10 @@ public abstract class AbstractScreen implements Screen {
 		         Gdx.files.internal("font/pecita.png"), false);
 		this.font_goodgirl= new BitmapFont(Gdx.files.internal("font/goodgirl.fnt"),
 		         Gdx.files.internal("font/goodgirl.png"), false);
-		this.batch = new SpriteBatch();
+		this.font_goodgirl2= new BitmapFont(Gdx.files.internal("font/goodgirl.fnt"),
+		         Gdx.files.internal("font/goodgirl.png"), false);
+		this.font_goodgirl3= new BitmapFont(Gdx.files.internal("font/goodgirl.fnt"),
+		         Gdx.files.internal("font/goodgirl.png"), false);
 		this.stage = new Stage(0, 0, true);
 	}
 
@@ -212,10 +229,7 @@ public abstract class AbstractScreen implements Screen {
 	public World getWorldbox() {
 		if (worldbox == null) {
 			worldbox = new World(new Vector2(0, -9.8f), true);
-//			 debugRenderer = new Box2DDebugRenderer(false, false, false,
-//			 false,false, false);
-//			 debugRenderer = new Box2DDebugRenderer(true, true, true, true,
-//			 		true, true);
+			debugRenderer = new Box2DDebugRenderer(debug, debug, debug, debug,debug, debug);
 		}
 		return worldbox;
 	}
@@ -236,7 +250,7 @@ public abstract class AbstractScreen implements Screen {
 		
 		// update and draw the stage actors
 		stage.act(delta);
-		 stage.draw();
+		stage.draw();
 
 		if (myToast!=null)
 			myToast.toaster();
@@ -250,7 +264,7 @@ public abstract class AbstractScreen implements Screen {
 			worldbox.step(1.0f / 60.0f, 1, 1);
 			MatZoom=camera.combined.cpy();
 			if (debug==true)
-				debugRenderer.render(this.worldbox, MatZoom.scl(BOX_TO_WORLD));
+				debugRenderer.render(worldbox, MatZoom.scl(BOX_TO_WORLD));
 		}
 	}
 
@@ -260,7 +274,7 @@ public abstract class AbstractScreen implements Screen {
 				+ width + " x " + height);
 
 		// resize the stage
-		stage.setViewport(width, height, true);
+		stage.setViewport(width, height, false);
 		
 		// Le monde Box2D ne doit pas changer
 		WORLD_TO_BOX = GAME_VIEWPORT_HEIGHT/20000.0f*GAME_VIEWPORT_WIDTH/(float)width;
@@ -305,7 +319,6 @@ public abstract class AbstractScreen implements Screen {
 		if (stage!=null) stage.dispose();
 		if (font_berlin!=null) font_berlin.dispose();
 		if (font_pecita!=null) font_pecita.dispose();
-		if (batch!=null) batch.dispose();
 
 	}
 

@@ -76,7 +76,7 @@ public class SplashScreen extends AbstractScreen {
 			arrayTapFinger.add(getAtlas().findRegion(TypeOfObject.tap_finger.getAllImages()[i]));
 		}
 		Animation tapFinger=new Animation(0.5f,arrayTapFinger,Animation.LOOP);
-		tapFingerActor=new AnimatedActor(new AnimationDrawable(tapFinger));
+		tapFingerActor=new AnimatedActor(tapFinger);
 		stage.addActor(tapFingerActor);
 		
 		Gdx.input.setInputProcessor(stage);
@@ -132,7 +132,7 @@ public class SplashScreen extends AbstractScreen {
 				* AbstractScreen.BOX_TO_WORLD);
 		splashImage.setRotation(splashBody.getAngle()
 				* MathUtils.radiansToDegrees);
-		if (wait1s-- < 0) {
+		if (wait-- < 0) {
 			int index = 0;
 			for (Fruit i : pommes) {
 				// Quels fruits détruire?
@@ -147,7 +147,7 @@ public class SplashScreen extends AbstractScreen {
 
 				index++;
 			}
-			wait1s = NB_CYCLE / 10;
+			wait = NB_CYCLE_FOR_1S;
 			Gdx.app.log("Fumper/SplashScreen/Render:",
 					"AccX=" + Gdx.input.getAccelerometerX() + "AccY="
 							+ Gdx.input.getAccelerometerY() + "AccZ="

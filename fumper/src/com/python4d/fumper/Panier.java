@@ -1,15 +1,14 @@
 package com.python4d.fumper;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -23,7 +22,7 @@ public class Panier {
 	private int nb_fruits_dans_panier = 0;
 
 	private Image imgPanier, imgPanier_front;
-	private Body bodyPanier, bodyPlanche;
+	private Body bodyPanier;
 	private TypeOfObject panier = TypeOfObject.panier;
 	private TypeOfObject panier_front = TypeOfObject.panier_front;
 
@@ -76,7 +75,6 @@ public class Panier {
 		bodyPanier.createFixture(myFixtureDef);
 
 		bodyPanier.setUserData(imgPanier);
-		bodyPlanche = ((PlayScreen) screen).getBascule().getBodyPlanche();
 
 		circleShape.dispose();
 	}

@@ -10,30 +10,37 @@ autres/fruitjumper
   orig: 270, 500
   offset: 0, 0
   index: -1
+autres/splash
+  rotate: false
+  xy: 2, 504
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
 autres/start
   rotate: false
-  xy: 274, 272
+  xy: 404, 674
   size: 320, 230
   orig: 320, 230
   offset: 0, 0
   index: -1
 autres/tap_finger1
   rotate: false
-  xy: 274, 120
+  xy: 726, 754
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 autres/tap_finger2
   rotate: false
-  xy: 747, 352
+  xy: 404, 522
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 autres/tapandplay
   rotate: false
-  xy: 596, 202
+  xy: 274, 202
   size: 149, 300
   orig: 149, 300
   offset: 0, 0
@@ -88,44 +95,58 @@ fruits/citron
   orig: 100, 100
   offset: 0, 0
   index: -1
+fruits/citrouille
+  rotate: false
+  xy: 2, 104
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+fruits/fraise
+  rotate: false
+  xy: 154, 154
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 fruits/orange
   rotate: false
-  xy: 206, 2
+  xy: 256, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 fruits/poire
   rotate: false
-  xy: 308, 2
+  xy: 358, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 fruits/pomme-dessin
   rotate: false
-  xy: 410, 2
+  xy: 460, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 fruits/pomme-dessin2
   rotate: false
-  xy: 512, 2
+  xy: 562, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 fruits/pomme-photo
   rotate: false
-  xy: 614, 2
+  xy: 664, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 fruits/pomme_verte
   rotate: false
-  xy: 716, 2
+  xy: 766, 154
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
@@ -135,9 +156,44 @@ Fumper-5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-objets/panier
+objets/fusee
   rotate: false
   xy: 2, 2
+  size: 204, 300
+  orig: 204, 300
+  offset: 0, 0
+  index: -1
+objets/fusee1
+  rotate: false
+  xy: 591, 644
+  size: 204, 300
+  orig: 204, 300
+  offset: 0, 0
+  index: -1
+objets/fusee2
+  rotate: false
+  xy: 208, 2
+  size: 204, 300
+  orig: 204, 300
+  offset: 0, 0
+  index: -1
+objets/fusee3
+  rotate: false
+  xy: 591, 342
+  size: 204, 300
+  orig: 204, 300
+  offset: 0, 0
+  index: -1
+objets/fusee4
+  rotate: false
+  xy: 797, 644
+  size: 204, 300
+  orig: 204, 300
+  offset: 0, 0
+  index: -1
+objets/panier
+  rotate: false
+  xy: 2, 304
   size: 587, 640
   orig: 587, 640
   offset: 0, 0
@@ -156,6 +212,46 @@ objets/panier-front
   index: -1
 
 Fumper-7.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+oiseau/bird1
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+oiseau/bird2
+  rotate: false
+  xy: 36, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+oiseau/bird3
+  rotate: false
+  xy: 70, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+oiseau/bird4
+  rotate: false
+  xy: 104, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+oiseau/bird5
+  rotate: false
+  xy: 138, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+
+Fumper-8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

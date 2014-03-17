@@ -13,6 +13,7 @@ import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AndroidApplication {
     private  AdView adView; 
+    private static boolean pub=true;
     private final static AdRequest adr=new AdRequest.Builder().build();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,7 @@ public class MainActivity extends AndroidApplication {
         //admob
         //https://github.com/libgdx/libgdx/wiki/Admob-in-libgdx
         //
-		View gameView = initializeForView(new Fumper(), false);
+		View gameView = initializeForView(new Fumper(), true);
 		RelativeLayout layout = new RelativeLayout(this);
 	    layout.addView(gameView);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -31,10 +32,14 @@ public class MainActivity extends AndroidApplication {
 		getWindow().clearFlags(
 				WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		AdView adView = new AdView(this);
-		adView.setAdUnitId("ca-app-pub-1008481061910472/5992717317");
-	    adView.setAdSize(AdSize.BANNER); 
-	    //adView.setAdUnitId("ca-app-pub-1008481061910472/2701710119");
-	    //adView.setAdSize(AdSize.BANNER); 
+		if (pub){
+			adView.setAdUnitId("ca-app-pub-1008481061910472/6901250516");
+		    adView.setAdSize(AdSize.BANNER); 
+		}
+		else{
+			adView.setAdUnitId("ca-app-pub-1008481061910472/2701710119");
+			adView.setAdSize(AdSize.BANNER); 
+		}
 	    RelativeLayout.LayoutParams adParams = 
 	            new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
 	                    RelativeLayout.LayoutParams.WRAP_CONTENT);
