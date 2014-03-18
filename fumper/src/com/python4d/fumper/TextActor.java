@@ -72,5 +72,12 @@ public class TextActor extends Actor {
 	public BitmapFont getFont() {
 		return font;
 	}
+	public int getStrWidth(){
+		return (int) font.getBounds(str).width;
+	}
+
+	public float getStrHeight() {
+		return (int) font.getBounds(str).height;
+	}
 
 }

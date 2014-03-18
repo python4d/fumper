@@ -25,6 +25,7 @@ public abstract class AbstractScreen implements Screen {
 	public static float BOX_TO_WORLD = 1.0f/WORLD_TO_BOX;
 	protected float delta=60.0f;
 	protected int NB_CYCLE_FOR_20S = (int) (20000.0f /delta);
+	protected int NB_CYCLE_FOR_15S = (int) (15000.0f /delta);
 	protected int NB_CYCLE_FOR_10S = (int) (10000.0f /delta);
 	protected int NB_CYCLE_FOR_5S = (int) (5000.0f / delta);
 	protected int NB_CYCLE_FOR_1S = (int) (1000.0f /delta);
@@ -33,7 +34,14 @@ public abstract class AbstractScreen implements Screen {
 
 	protected Fumper game;
 	
-	protected BitmapFont font_berlin,font_pecita,font_hennypenny,font_hennypenny2,font_goodgirl,font_goodgirl2,font_goodgirl3;
+	protected BitmapFont 	font_berlin,
+							font_berlin_copyright,
+							font_pecita,
+							font_hennypenny,
+							font_hennypenny2,
+							font_goodgirl,
+							font_goodgirl2,
+							font_goodgirl3;
 
 	protected  Stage stage;
 	protected TypeOfObject[] tofTable = TypeOfObject.values();
@@ -204,6 +212,8 @@ public abstract class AbstractScreen implements Screen {
 	public AbstractScreen(Fumper game) {
 		this.game = game;
 
+		this.font_berlin_copyright = new BitmapFont(Gdx.files.internal("font/berlin.fnt"),
+		         Gdx.files.internal("font/berlin.png"), false);
 		this.font_berlin = new BitmapFont(Gdx.files.internal("font/berlin.fnt"),
 		         Gdx.files.internal("font/berlin.png"), false);
 		this.font_hennypenny= new BitmapFont(Gdx.files.internal("font/HennyPenny.fnt"),

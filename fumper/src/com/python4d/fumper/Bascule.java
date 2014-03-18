@@ -14,16 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.python4d.fumper.AbstractScreen.TypeOfObject;
 
 public class Bascule{
 
 	private AbstractScreen screen; 
 	private Image imgBuche,imgPlanche;
+	private long time_push=0,lasttime_push=0;
 
 	private Body bodyBuche,bodyPlanche;
 	public Bascule(AbstractScreen screen, float Posx, float Posy, float size) {
 		this.screen=screen;
+		lasttime_push=TimeUtils.millis();
 		CreateBascule(Posx, Posy,size);
 
 		imgPlanche.addListener(new InputListener() {
@@ -154,9 +157,12 @@ public class Bascule{
 	}
 
 	public void push(int level) {
-		float forceY=(float) -Math.pow(bodyPlanche.getMass(), 1.90)*(1+level/100.0f);//-bodyPlanche.getMass()*bodyPlanche.getMass();//
-		Gdx.app.log("Fumper/Bascule/push()",": forceY="+forceY);
-		bodyPlanche.applyAngularImpulse(forceY, true);
-		//bodyPlanche.applyTorque(forceY, true);
+		if (TimeUtils.millis()-lasttime_push>100){
+			lasttime_push=TimeUtils.millis();
+			float forceY=(float) -Math.pow(bodyPlanche.getMass(), 1.90)*(1+level/100.0f);//-bodyPlanche.getMass()*bodyPlanche.getMass();//
+			Gdx.app.log("Fumper/Bascule/push()",": forceY="+forceY);
+			bodyPlanche.applyAngularImpulse(forceY, true);
+			//bodyPlanche.applyTorque(forceY, true);
+		}			
 	}
 }

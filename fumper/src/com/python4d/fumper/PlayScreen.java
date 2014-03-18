@@ -57,7 +57,7 @@ public class PlayScreen extends AbstractScreen {
 	
 	private AnimatedActor fusee, oiseau;
 	private Panier panier = null;
-	private TextActor textScore, textHighScore, textGameOver, textStart,textBonus;
+	private TextActor textCopyright,textScore, textHighScore, textGameOver, textStart,textBonus;
 	private Timer timerHS = new Timer();
 
 	public PlayScreen(Fumper game) {
@@ -144,7 +144,11 @@ public class PlayScreen extends AbstractScreen {
 		bgImage = new Image(bgDrawable);
 		bgImage.setFillParent(true);
 		stage.addActor(bgImage);
+		
+		//copyright
+		textCopyright=new TextActor(font_berlin_copyright, "(c) BacoLand/Python4D - 03/2014 - v1.03");
 
+		stage.addActor(textCopyright);
 		// Splash
 		splash = new Image(new TextureRegionDrawable(getAtlas()
 				.findRegion(TypeOfObject.splash.getNameImage())));
@@ -425,7 +429,7 @@ public class PlayScreen extends AbstractScreen {
 		case NEW_FRUIT:
 			panier.check_fruits_in();
 			textScore.addAction(sequence(alpha(0.0f, 0.2f), alpha(1.0f,0.2f)));
-			wait = bonus_flag?NB_CYCLE_FOR_5S:NB_CYCLE_FOR_10S;
+			wait = bonus_flag?NB_CYCLE_FOR_5S:NB_CYCLE_FOR_15S;
 			wait = debug?NB_CYCLE_FOR_1S:wait;
 			if (--nb_fruits < 0)
 				examGamePart = GamePart.LEVEL_END;
@@ -679,7 +683,11 @@ public class PlayScreen extends AbstractScreen {
 			textScore.setPosition(10,
 					textHighScore.getY() - textHighScore.getHeight() * 4);
 		}
-
+		if (textCopyright != null) {
+			textCopyright.toFront();
+			textCopyright.setScale(Gdx.graphics.getWidth()/1500f);
+			textCopyright.setPosition(Gdx.graphics.getWidth()-textCopyright.getStrWidth(),textCopyright.getStrHeight()/2f);
+		}
 	}
 
 	private void FruitsDansArbre() {
