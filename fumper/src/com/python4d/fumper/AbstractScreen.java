@@ -239,6 +239,11 @@ public abstract class AbstractScreen implements Screen {
 	public World getWorldbox() {
 		if (worldbox == null) {
 			worldbox = new World(new Vector2(0, -9.8f), true);
+			//permet que aucun object  "ne colle" un peu efficace mais pas totalement!
+			//http://www.badlogicgames.com/wordpress/?p=2030
+			World.setVelocityThreshold(0.0f);
+			//
+
 			debugRenderer = new Box2DDebugRenderer(debug, debug, debug, debug,debug, debug);
 		}
 		return worldbox;

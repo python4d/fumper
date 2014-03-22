@@ -2,7 +2,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.python4d.fumper"
-    android:versionCode="4"
+    android:versionCode="5"
     android:versionName="1.0" >
     
     <uses-permission 
@@ -11,11 +11,15 @@
  		android:name="android.permission.VIBRATE"/>
     <uses-sdk 
         android:minSdkVersion="5" 
-        android:targetSdkVersion="19" />
-
+        android:targetSdkVersion="20" />
+	<uses-feature
+		android:name = "android.hardware.sensor.accelerometer"
+		android:required = "true" />
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >     
+        android:label="@string/app_name" 
+        
+        android:allowBackup="true">     
            
         <meta-data 
             android:name="com.google.android.gms.version" 

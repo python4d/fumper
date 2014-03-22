@@ -21,14 +21,14 @@ public class Bascule{
 
 	private AbstractScreen screen; 
 	private Image imgBuche,imgPlanche;
-	private long time_push=0,lasttime_push=0;
+	private long lasttime_push=0;
 
 	private Body bodyBuche,bodyPlanche;
 	public Bascule(AbstractScreen screen, float Posx, float Posy, float size) {
 		this.screen=screen;
 		lasttime_push=TimeUtils.millis();
 		CreateBascule(Posx, Posy,size);
-
+		//bodyBuche.setAwake(false);
 		imgPlanche.addListener(new InputListener() {
 		 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 		 		Gdx.app.log("Fumper/Bascule/imgPlache Actor", "touch started at (" + x + ", " + y + ")");

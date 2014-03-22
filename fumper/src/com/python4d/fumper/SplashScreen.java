@@ -1,28 +1,18 @@
 package com.python4d.fumper;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.RemoteInput;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.JointDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -30,9 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.python4d.fumper.AbstractScreen.FumperSound;
-import com.python4d.fumper.AbstractScreen.TypeOfObject;
-import com.python4d.fumper.Toast.TEXT_POS;
 
 public class SplashScreen extends AbstractScreen {
 
@@ -42,8 +29,6 @@ public class SplashScreen extends AbstractScreen {
 	private Array<Fruit> pommes = new Array<Fruit>();
 	private boolean quit = false;
 	private TextActor textActor;
-	private int rotation;
-
 	public SplashScreen(Fumper game) {
 		super(game);
 	}

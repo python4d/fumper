@@ -1,6 +1,19 @@
 package com.python4d.fumper;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateBy;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleBy;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import java.util.Random;
 
@@ -12,7 +25,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -28,14 +40,14 @@ public class PlayScreen extends AbstractScreen {
 	private enum GamePart {
 		DEBUT, FIN, EN_COURS, LEVEL_END, NEW_LEVEL, NEW_FRUIT, QUIT, GAMEOVER, BONUS_TIME, BONUS_TIME_END
 	};
-
+	
+	private static String copyright="(c) BacoLand/Python4D - 9/2014 - v1.05";
+	private boolean superman=false;
+	
 	ParticleEffectActor effectActor;
-	private boolean start_fusee;
-
 	private GamePart examGamePart = GamePart.DEBUT;
 	private Image bgImage, tapandplayActor,splash;
 	private Bascule bascule;
-	private Body camion;
 	private Array<Fruit> fruits = new Array<Fruit>();
 	private Array<Image> imageFruits = null;
 
@@ -44,7 +56,6 @@ public class PlayScreen extends AbstractScreen {
 	}
 
 	private boolean start_ok = false;
-	private boolean quit = false;
 	private int level = 1;
 	private int nb_fruits = 10;
 
@@ -58,8 +69,6 @@ public class PlayScreen extends AbstractScreen {
 	private AnimatedActor fusee, oiseau;
 	private Panier panier = null;
 	private TextActor textCopyright,textScore, textHighScore, textGameOver, textStart,textBonus;
-	private Timer timerHS = new Timer();
-
 	public PlayScreen(Fumper game) {
 		super(game);
 		highscore = game.FumperPrefs.getHighScore();
@@ -115,6 +124,7 @@ public class PlayScreen extends AbstractScreen {
 	 * Boite de dialog de base pour enregistrer le nom du farmer vainqueur
 	 */
 
+	@SuppressWarnings("unused")
 	private TextInputListener listener = new TextInputListener() {
 
 		@Override
@@ -146,7 +156,7 @@ public class PlayScreen extends AbstractScreen {
 		stage.addActor(bgImage);
 		
 		//copyright
-		textCopyright=new TextActor(font_berlin_copyright, "(c) BacoLand/Python4D - 03/2014 - v1.03");
+		textCopyright=new TextActor(font_berlin_copyright,copyright);
 
 		stage.addActor(textCopyright);
 		// Splash
@@ -265,7 +275,7 @@ public class PlayScreen extends AbstractScreen {
 					int pointer, int button) {
 				Gdx.app.log("Fumper/PlayScreen/InputListenerStage",
 						"touch started at (" + x + ", " + y + ")");
-				getBascule().push(level+(bonus_flag?100:0));
+				getBascule().push(level+(bonus_flag?100:0)+(superman?100:0));
 				Gdx.app.log("PlayScreen/touchDown=>", "bonus="+bonus_flag+", level="+level+", force="+(level+(bonus_flag?100:0)));
 				FumperSound.bascule.play(0.5f);
 
@@ -302,7 +312,6 @@ public class PlayScreen extends AbstractScreen {
 			// cas spécial du fruit qui va dans les airs => le Bonus time permet de lancer très fort...
 			if (i.getY() > Gdx.graphics.getWidth()*3f
 					&& fusee.getActions().size == 0) {
-				start_fusee = true;
 				score+=5;
 				textScore.addAction(sequence(scaleBy(0.5f,0.5f, 0.5f), scaleBy(-0.5f,-0.5f, 0.5f)));
 				// On positionne en dehors de l'écran la fusee
@@ -382,7 +391,8 @@ public class PlayScreen extends AbstractScreen {
 	}
 
 	private void UpdateHUD() {
-		textScore.setText("Score=" + score + "\nLevel=" + level);
+		String txt= new String("Score=" + score + "\nLevel=" + level);
+		textScore.setText(txt);
 		StringBuffer chaine = new StringBuffer("Local HighScore=" + highscore);
 		if (highscoreWEB < 0 || highscoreWEB_name.startsWith("!"))
 			textHighScore.setText(chaine
@@ -404,6 +414,7 @@ public class PlayScreen extends AbstractScreen {
 
 		UpdateHUD();
 		getBascule().update();
+		getPanier().update();
 		switch (examGamePart) {
 
 		case DEBUT:
@@ -411,19 +422,18 @@ public class PlayScreen extends AbstractScreen {
 				textGameOver.setVisible(false);
 				textStart.setVisible(false);
 				score = 0;
-				level = 1;
+				level = superman?9:1;
 				nb_fruits = 10;
 				resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				examGamePart = GamePart.EN_COURS;
 			}
 			break;
 		case EN_COURS:
-			if (wait-- < 0 || fruits.size == 0)
+			// quand doit-on laisser un nouveau fruit? soit plus de body fruits dans le jeu wait-- < 0 
+			if (fruits.size-panier.check_fruits_in()<= 0 || (bonus_flag? wait--<0:false))
 				examGamePart = GamePart.NEW_FRUIT;
-			else {
+			else
 				UpdateFruits(fruits, false);
-
-			}
 			break;
 
 		case NEW_FRUIT:
@@ -729,7 +739,12 @@ public class PlayScreen extends AbstractScreen {
 	public Bascule getBascule() {
 		return bascule;
 	}
-
+	/**
+	 * @return the panier
+	 */
+	public Panier getPanier() {
+		return panier;
+	}
 	/**
 	 * @param bascule
 	 *            the bascule to set

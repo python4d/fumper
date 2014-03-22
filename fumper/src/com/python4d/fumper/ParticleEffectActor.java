@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleEffectActor extends Actor {
@@ -32,12 +31,10 @@ public class ParticleEffectActor extends Actor {
 	public void act(float delta) {
 		super.act(delta);
 		effect.setPosition(actor.getX()+actor.getWidth()*actor.getScaleX()/5f, actor.getY()+actor.getHeight()*actor.getScaleY()/2.8f);
-		for (ParticleEmitter emitter : effect.getEmitters()) { //get the list of emitters - things that emit particles
-
+//		for (ParticleEmitter emitter : effect.getEmitters()) { //get the list of emitters - things that emit particles
 			effect.getEmitters().get(0).getAngle().setLow(-actor.getRotation()+45,actor.getRotation()+45); //low is the minimum rotation
-			effect.getEmitters().get(0).getAngle().setHigh(-actor.getRotation()+45,actor.getRotation()+45); //high is the max rotation
-			
-         }
+			effect.getEmitters().get(0).getAngle().setHigh(-actor.getRotation()+45,actor.getRotation()+45); //high is the max rotation		
+//         }
 		effect.update(delta); // update it
 	}
 	

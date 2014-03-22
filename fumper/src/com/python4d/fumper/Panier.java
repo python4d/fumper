@@ -1,7 +1,9 @@
 package com.python4d.fumper;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -25,6 +27,15 @@ public class Panier {
 	private Body bodyPanier;
 	private TypeOfObject panier = TypeOfObject.panier;
 	private TypeOfObject panier_front = TypeOfObject.panier_front;
+	private float PosxW,PosyW;
+
+	public float getPosxW() {
+		return PosxW;
+	}
+
+	public float getPosyW() {
+		return PosyW;
+	}
 
 	public Panier(AbstractScreen screen, float Posx, float Posy, float size) {
 		this.screen = screen;
@@ -41,8 +52,8 @@ public class Panier {
 		imgPanier_front.setPosition(Posx, Posy);
 		screen.stage.addActor(imgPanier);
 		screen.stage.addActor(imgPanier_front);
-		float PosxW = (imgPanier.getX()) * AbstractScreen.WORLD_TO_BOX;
-		float PosyW = (imgPanier.getY()) * AbstractScreen.WORLD_TO_BOX;
+		PosxW = (imgPanier.getX()) * AbstractScreen.WORLD_TO_BOX;
+		PosyW = (imgPanier.getY()) * AbstractScreen.WORLD_TO_BOX;
 		// Create our body definition
 		BodyDef bdPanier = new BodyDef();
 		// Set its world position
@@ -124,6 +135,53 @@ public class Panier {
 		screen.getWorldbox().destroyBody(bodyPanier);
 
 	}
+	
+	public float[] getAcc(){
+		float x=0,y=0,z=0;
+	
+		if (Gdx.input.isPeripheralAvailable( Peripheral.Accelerometer ))
+		{
+			x=Gdx.input.getAccelerometerX();// points to the right (when in portrait orientation)
+			y=Gdx.input.getAccelerometerY();// points upwards (when in portrait orientation)
+			z=Gdx.input.getAccelerometerZ();// points to the front of the display (coming out of the screen)
+		}
+		return new float[] { x,y,z };
+	}
+	
+	protected float oldx=0,oldy=0;
+	public void update() {
+		
+		float newx = oldx,newy=oldy;
+		float vitesse = 0.2f;
+		float taille = 0.2f;
+		
+		if (getAcc()[0]>newx+1) 
+			newx+=vitesse;
+		if (getAcc()[0]<newx-1) 
+			newx-=vitesse;
+		if (getAcc()[1]>newy+1)
+			newy+=vitesse;
+		if (getAcc()[1]<newy-1)
+			newy-=vitesse;
+		if (Gdx.input.isPeripheralAvailable( Peripheral.Accelerometer ))
+		{
+			getBodyPanier().setTransform(getPosxW()-newx*taille,	getPosyW()+(10.0f-newy)*taille,0);
+		}
+		oldx=newx;
+		oldy=newy;
+		imgPanier.setPosition(bodyPanier.getPosition().x
+				* AbstractScreen.BOX_TO_WORLD, bodyPanier.getPosition().y
+				* AbstractScreen.BOX_TO_WORLD);
+		imgPanier.setRotation(bodyPanier.getAngle()
+				* MathUtils.radiansToDegrees);
+		imgPanier_front.setPosition(bodyPanier.getPosition().x
+				* AbstractScreen.BOX_TO_WORLD, bodyPanier.getPosition().y
+				* AbstractScreen.BOX_TO_WORLD);
+		imgPanier_front.setRotation(bodyPanier.getAngle()
+				* MathUtils.radiansToDegrees);
+		
+	}
+
 	public int check_fruits_in() {
 		float x=imgPanier.getX()* AbstractScreen.WORLD_TO_BOX;
 		float y=imgPanier.getY()* AbstractScreen.WORLD_TO_BOX;
@@ -145,14 +203,15 @@ public class Panier {
 			}
 			else
 				//nouveau dedans et sans vie?
-				if (in && f.getBody().getAngularVelocity()== 0.0f 
-						&& Math.abs(f.getBody().getLinearVelocity().y)<=0.0001f){
+				if (in && f.getBody().getAngularVelocity()<= 0.1f 
+						&& Math.abs(f.getBody().getLinearVelocity().y)<=0.1f
+						&& Math.abs(f.getBody().getLinearVelocity().x)<=0.1f){
 					f.getBody().setUserData(new String("in"));
 					nb++;
 				}
 			
 		}
-		Gdx.app.log("Fumper/panier/nb_fruits_in()",""+nb);
+		//Gdx.app.log("Fumper/panier/nb_fruits_in()",""+nb);
 		return nb;
 	}
 	public int nb_fruits_in(Array<Fruit> fruits) {

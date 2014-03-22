@@ -12,8 +12,6 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPReply;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.python4d.fumper.Toast.TEXT_POS;
 
 public class FTPConnect extends FTPClient {
 	

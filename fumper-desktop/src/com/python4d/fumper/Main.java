@@ -9,10 +9,10 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 public class Main {
 	public static void main(String[] args) {
 
-        Settings settings = new Settings();
-        settings.maxWidth = 1024;
-        settings.maxHeight = 1024;
-        TexturePacker.processIfModified(settings, "./images", "../fumper-android/assets/texture", "Fumper.atlas");
+//        Settings settings = new Settings();
+//        settings.maxWidth = 1024;
+//        settings.maxHeight = 1024;
+//        TexturePacker.processIfModified(settings, "./images", "../fumper-android/assets/texture", "Fumper.atlas");
 
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "fumper";
